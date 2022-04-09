@@ -1,0 +1,35 @@
+.btn {
+    width: 50px;
+    height: 50px;
+    border: 1px solid;
+    vertical-align: middle;
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.sub_btn {
+    border: 1px solid;
+    vertical-align: middle;
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.sub_empty {
+    border: 0;
+    vertical-align: middle;
+    font-size: 30px;
+    font-weight: 600;
+    background-color: transparent;
+}
+
+
+.board {
+    width: 450px !important;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.basic_cube {
+    /* padding-left: 20px; */
+    margin-top: 20px;
+}
