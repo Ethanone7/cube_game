@@ -7,6 +7,10 @@
     font-weight: 600;
 }
 
+.valid_btn:hover{
+    background-color: #3e8e41 !important;
+}
+
 .sub_btn {
     border: 1px solid;
     vertical-align: middle;

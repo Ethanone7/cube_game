@@ -58,6 +58,13 @@ const Board: React.FC<BoardProps> = props => {
     return "1px solid"
   }
 
+  const btnClassName = (val: number) => {
+    if (val === 0) {
+      return "btn valid_btn"
+    }
+    return "btn"
+  }
+
   const onFinishEdit = () => {
     if (editIndex === 0) {
       setDisplay0(false);
@@ -211,7 +218,7 @@ const Board: React.FC<BoardProps> = props => {
   }
 
   let boardView = (
-    array.map((val, idx) => { return (<button className="btn" style={{ backgroundColor: btnColor(val), borderRight: borderRight(idx), borderBottom: borderBottom(idx) }} onClick={() => onClickButton(idx)}></button>) })
+    array.map((val, idx) => { return (<button className={btnClassName(val)} style={{ backgroundColor: btnColor(val), borderRight: borderRight(idx), borderBottom: borderBottom(idx) }} onClick={() => onClickButton(idx)}></button>) })
   )
 
 
