@@ -27,7 +27,7 @@ const generateRandomNumber = (size: number) => {
 };
 
 const Board: React.FC<BoardProps> = props => {
-  const [array, setArray] = useState<number[]>(EMPTY_ARRAY);
+  // const [array, setArray] = useState<number[]>(EMPTY_ARRAY);
   const [trueArray, setTrueArray] = useState<number[][]>(EMPTY_2D_ARRAY);
   const [displayArray, setDisplayArray] = useState<number[][]>(EMPTY_2D_ARRAY);
   const [score, setScore] = useState<number>(0);
@@ -134,125 +134,100 @@ const Board: React.FC<BoardProps> = props => {
     setEditing(false);
   };
 
-  const checkScore = (arrayList: number[], cubeNum?: number) => {
-    const tmpArray = [...arrayList];
-    const flashArray = [...arrayList];
-    const visitArray: boolean[] = Array(81).fill(false);
+  const checkScoreV2 = (matrix: number[][], cubeNum?: number) => {
+    const tmpMatrix = lodash.cloneDeep(matrix);
+    const flashMatrix = lodash.cloneDeep(matrix);
+    setTrueArray(tmpMatrix);
     let cnt = 0;
     for (let i = 0; i < 9; i++) {
       if (
-        tmpArray[i * 9] &&
-        tmpArray[i * 9 + 1] &&
-        tmpArray[i * 9 + 2] &&
-        tmpArray[i * 9 + 3] &&
-        tmpArray[i * 9 + 4] &&
-        tmpArray[i * 9 + 5] &&
-        tmpArray[i * 9 + 6] &&
-        tmpArray[i * 9 + 7] &&
-        tmpArray[i * 9 + 8]
+        tmpMatrix[i][0] &&
+        tmpMatrix[i][1] &&
+        tmpMatrix[i][2] &&
+        tmpMatrix[i][3] &&
+        tmpMatrix[i][4] &&
+        tmpMatrix[i][5] &&
+        tmpMatrix[i][6] &&
+        tmpMatrix[i][7] &&
+        tmpMatrix[i][8]
       ) {
-        visitArray[i * 9] = true;
-        visitArray[i * 9 + 1] = true;
-        visitArray[i * 9 + 2] = true;
-        visitArray[i * 9 + 3] = true;
-        visitArray[i * 9 + 4] = true;
-        visitArray[i * 9 + 5] = true;
-        visitArray[i * 9 + 6] = true;
-        visitArray[i * 9 + 7] = true;
-        visitArray[i * 9 + 8] = true;
-        flashArray[i * 9] = 2;
-        flashArray[i * 9 + 1] = 2;
-        flashArray[i * 9 + 2] = 2;
-        flashArray[i * 9 + 3] = 2;
-        flashArray[i * 9 + 4] = 2;
-        flashArray[i * 9 + 5] = 2;
-        flashArray[i * 9 + 6] = 2;
-        flashArray[i * 9 + 7] = 2;
-        flashArray[i * 9 + 8] = 2;
+        flashMatrix[i][0] = 2;
+        flashMatrix[i][1] = 2;
+        flashMatrix[i][2] = 2;
+        flashMatrix[i][3] = 2;
+        flashMatrix[i][4] = 2;
+        flashMatrix[i][5] = 2;
+        flashMatrix[i][6] = 2;
+        flashMatrix[i][7] = 2;
+        flashMatrix[i][8] = 2;
         cnt++;
       }
       if (
-        tmpArray[i] &&
-        tmpArray[i + 1 * 9] &&
-        tmpArray[i + 2 * 9] &&
-        tmpArray[i + 3 * 9] &&
-        tmpArray[i + 4 * 9] &&
-        tmpArray[i + 5 * 9] &&
-        tmpArray[i + 6 * 9] &&
-        tmpArray[i + 7 * 9] &&
-        tmpArray[i + 8 * 9]
+        tmpMatrix[0][i] &&
+        tmpMatrix[1][i] &&
+        tmpMatrix[2][i] &&
+        tmpMatrix[3][i] &&
+        tmpMatrix[4][i] &&
+        tmpMatrix[5][i] &&
+        tmpMatrix[6][i] &&
+        tmpMatrix[7][i] &&
+        tmpMatrix[8][i]
       ) {
-        visitArray[i] = true;
-        visitArray[i + 1 * 9] = true;
-        visitArray[i + 2 * 9] = true;
-        visitArray[i + 3 * 9] = true;
-        visitArray[i + 4 * 9] = true;
-        visitArray[i + 5 * 9] = true;
-        visitArray[i + 6 * 9] = true;
-        visitArray[i + 7 * 9] = true;
-        visitArray[i + 8 * 9] = true;
-        flashArray[i] = 2;
-        flashArray[i + 1 * 9] = 2;
-        flashArray[i + 2 * 9] = 2;
-        flashArray[i + 3 * 9] = 2;
-        flashArray[i + 4 * 9] = 2;
-        flashArray[i + 5 * 9] = 2;
-        flashArray[i + 6 * 9] = 2;
-        flashArray[i + 7 * 9] = 2;
-        flashArray[i + 8 * 9] = 2;
+        flashMatrix[0][i] = 2;
+        flashMatrix[1][i] = 2;
+        flashMatrix[2][i] = 2;
+        flashMatrix[3][i] = 2;
+        flashMatrix[4][i] = 2;
+        flashMatrix[5][i] = 2;
+        flashMatrix[6][i] = 2;
+        flashMatrix[7][i] = 2;
+        flashMatrix[8][i] = 2;
         cnt++;
       }
-      const j = 27 * Math.floor(i / 3) + (i % 3) * 3;
+      const x = Math.floor(i / 3) * 3;
+      const y = (i % 3) * 3;
       if (
-        tmpArray[j] &&
-        tmpArray[j + 1] &&
-        tmpArray[j + 2] &&
-        tmpArray[j + 9] &&
-        tmpArray[j + 10] &&
-        tmpArray[j + 11] &&
-        tmpArray[j + 18] &&
-        tmpArray[j + 19] &&
-        tmpArray[j + 20]
+        tmpMatrix[x][y] &&
+        tmpMatrix[x + 1][y] &&
+        tmpMatrix[x + 2][y] &&
+        tmpMatrix[x][y + 1] &&
+        tmpMatrix[x + 1][y + 1] &&
+        tmpMatrix[x + 2][y + 1] &&
+        tmpMatrix[x][y + 2] &&
+        tmpMatrix[x + 1][y + 2] &&
+        tmpMatrix[x + 2][y + 2]
       ) {
-        visitArray[j] = true;
-        visitArray[j + 1] = true;
-        visitArray[j + 2] = true;
-        visitArray[j + 9] = true;
-        visitArray[j + 10] = true;
-        visitArray[j + 11] = true;
-        visitArray[j + 18] = true;
-        visitArray[j + 19] = true;
-        visitArray[j + 20] = true;
-        flashArray[j] = 2;
-        flashArray[j + 1] = 2;
-        flashArray[j + 2] = 2;
-        flashArray[j + 9] = 2;
-        flashArray[j + 10] = 2;
-        flashArray[j + 11] = 2;
-        flashArray[j + 18] = 2;
-        flashArray[j + 19] = 2;
-        flashArray[j + 20] = 2;
+        flashMatrix[x][y] = 2;
+        flashMatrix[x + 1][y] = 2;
+        flashMatrix[x + 2][y] = 2;
+        flashMatrix[x][y + 1] = 2;
+        flashMatrix[x + 1][y + 1] = 2;
+        flashMatrix[x + 2][y + 1] = 2;
+        flashMatrix[x][y + 2] = 2;
+        flashMatrix[x + 1][y + 2] = 2;
+        flashMatrix[x + 2][y + 2] = 2;
         cnt++;
       }
     }
-    for (let i = 0; i < 81; i++) {
-      if (tmpArray[i] && visitArray[i]) {
-        tmpArray[i] = 0;
+    for (let i = 0; i < 9; i++) {
+      for (let j = 0; j < 9; j++) {
+        if (tmpMatrix[i][j] && flashMatrix[i][j] === 2) {
+          tmpMatrix[i][j] = 0;
+        }
       }
     }
     if (cnt > 0) {
-      setArray(flashArray);
+      setDisplayArray(flashMatrix);
+      setTrueArray(tmpMatrix);
       const addScore: number = cnt * (9 + generateRandomNumber(10));
-      // message.success(addScore+' points', 3)
       setTimeout(() => setScore(score + addScore), DELAY_MS);
-      setTimeout(() => setArray(tmpArray), DELAY_MS);
+      setTimeout(() => setDisplayArray(tmpMatrix), DELAY_MS);
     }
   };
 
   const onMoveOverCube = (idx: number) => {
     if (editing && editingCube.length > 0) {
-      const tmpTrueArray = lodash.cloneDeep(trueArray);
-      console.log(trueArray);
+      const tmpTrueMatrix = lodash.cloneDeep(trueArray);
       const rowLen = editingCube.length;
       const colLen = editingCube[0].length;
       const rowOrigin = Math.floor(idx / 9);
@@ -264,91 +239,71 @@ const Board: React.FC<BoardProps> = props => {
           const x = rowStart + i;
           const y = colStart + j;
           if (x >= 0 && x < 9 && y >= 0 && y < 9) {
-            tmpTrueArray[x][y] += editingCube[i][j] ? 3 : 0;
+            tmpTrueMatrix[x][y] += editingCube[i][j] ? 3 : 0;
           }
         }
       }
-      console.log(editingCube);
-      console.log(tmpTrueArray);
-      setDisplayArray(tmpTrueArray);
+      setDisplayArray(tmpTrueMatrix);
+    }
+  };
+
+  const onMoveOutCube = () => {
+    if (editing && editingCube.length > 0) {
+      setDisplayArray(trueArray);
     }
   };
 
   const onClickButtonV2 = (idx: number) => {
-    if (!editing) {
-      const tmpTrueArray = lodash.cloneDeep(trueArray);
+    if (editing && editingCube.length > 0) {
+      const tmpTrueMatrix = lodash.cloneDeep(trueArray);
+      let flag = true;
+      const rowLen = editingCube.length;
+      const colLen = editingCube[0].length;
+      const rowOrigin = Math.floor(idx / 9);
+      const colOrigin = idx % 9;
+      const rowStart = rowOrigin - yPos;
+      const colStart = colOrigin - xPos;
+      for (let i = 0; i < rowLen; i++) {
+        for (let j = 0; j < colLen; j++) {
+          const x = rowStart + i;
+          const y = colStart + j;
+          if (!(x >= 0 && x < 9 && y >= 0 && y < 9) && editingCube[i][j]) {
+            flag = false;
+            break;
+          }
+          if (editingCube[i][j] && tmpTrueMatrix[x][y] > 0) {
+            flag = false;
+            break;
+          }
+          if (editingCube[i][j] && tmpTrueMatrix[x][y] === 0) {
+            tmpTrueMatrix[x][y] = 1; //TODO will add another color
+          }
+        }
+        if (!flag) {
+          break;
+        }
+      }
+      if (flag) {
+        onFinishEdit();
+        setDisplayArray(tmpTrueMatrix);
+        setTimeout(() => checkScoreV2(tmpTrueMatrix), DELAY_MS);
+      } else {
+        alert('No space for it');
+      }
+    } else if (!editing) {
+      const tmpTrueMatrix = lodash.cloneDeep(trueArray);
       const x = Math.floor(idx / 9);
       const y = idx % 9;
-      tmpTrueArray[x][y] = 1;
-      setDisplayArray(tmpTrueArray);
-      setTrueArray(tmpTrueArray);
+      tmpTrueMatrix[x][y] = 1;
+      setDisplayArray(tmpTrueMatrix);
+      checkScoreV2(tmpTrueMatrix);
     }
   };
-
-  // const onClickButton = (idx: number) => {
-  //   if (editing && editingCube.length > 0) {
-  //     const tmpArray = [...array]
-  //     let flag: boolean = true
-  //     const xLen = editingCube[0].length
-  //     const yLen = editingCube.length
-  //     const xOrig = idx % 9
-  //     const yOrig = Math.floor(idx / 9)
-  //     const xStart = xOrig - xPos
-  //     const yStart = yOrig - yPos
-  //     for (let i = 0; i < xLen; i++) {
-  //       for (let j = 0; j < yLen; j++) {
-  //         const x = xStart + i
-  //         const y = yStart + j
-  //         const index = 9 * y + x
-  //         console.log('i: ' + i + ' j:' + j + ' x:' + x + ' y:' + y)
-  //         if (editingCube[j][i] && (x < 0 || x >= 9 || y < 0 || y >= 9)) {
-  //           flag = false
-  //           break
-  //         }
-  //         if (editingCube[j][i] && array[index] > 0) {
-  //           flag = false
-  //           break
-  //         }
-  //         console.log('i: ' + i + ' j:' + j + ' val:' + editingCube[j][i])
-  //         if (editingCube[j][i]) {
-  //           tmpArray[index] = 2
-  //         }
-  //       }
-  //       if (!flag) {
-  //         break
-  //       }
-  //     }
-  //     if (flag) {
-  //       for (let i = 0; i < tmpArray.length; i++) {
-  //         if (tmpArray[i] > 1) {
-  //           console.log(i)
-  //           tmpArray[i] = 1
-  //         }
-  //       }
-  //       setArray(tmpArray)
-  //       setTimeout(() => checkScore(tmpArray), DELAY_MS)
-  //       onFinishEdit()
-  //     } else {
-  //       alert('No space for it')
-  //     }
-  //   } else {
-  //     const tmpArray = [...array]
-  //     if (idx >= 0 && idx < array.length) {
-  //       tmpArray[idx] = 1 - tmpArray[idx]
-  //       setArray(tmpArray)
-  //       setTimeout(() => checkScore(tmpArray), DELAY_MS)
-  //     }
-  //   }
-  // }
-
-  // const boardView = (
-  //   array.map((val, idx) => { return (<button onMouseOut={() => console.log(idx + ' out')} onMouseOver={() => console.log(idx + ' over')} key={'btn' + idx} className={btnClassName(val)} style={{ backgroundColor: btnColor(val), borderRight: borderRight(idx), borderBottom: borderBottom(idx), width: onSetCubeLength(), height: onSetCubeLength() }} onClick={() => onClickButton(idx)}></button>) })
-  // )
 
   const boardViewV2 = displayArray.flat().map((val, idx) => {
     return (
       <button
-        onMouseOut={() => setDisplayArray(trueArray)}
+        onMouseOut={() => onMoveOutCube()}
         onMouseOver={() => onMoveOverCube(idx)}
         key={'btn' + idx}
         className={btnClassName(val)}
@@ -371,8 +326,10 @@ const Board: React.FC<BoardProps> = props => {
         <button
           onClick={() => {
             setScore(0);
-            setArray(EMPTY_ARRAY);
+            setTrueArray(EMPTY_2D_ARRAY);
+            setDisplayArray(EMPTY_2D_ARRAY);
           }}
+          style={{display: 'none'}}
         >
           Reset
         </button>
@@ -381,10 +338,20 @@ const Board: React.FC<BoardProps> = props => {
             console.log('box0: ' + box0);
             console.log('box1: ' + box1);
             console.log('box2: ' + box2);
+            console.log(displayArray);
             console.log(trueArray);
           }}
+          style={{display: 'none'}}
         >
           log
+        </button>
+        <button
+          onClick={() => {
+            setDisplayArray(trueArray);
+          }}
+          style={{display: 'none'}}
+        >
+          correct
         </button>
       </h2>
       <div>{boardViewV2}</div>
