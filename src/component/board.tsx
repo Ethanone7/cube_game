@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { Card } from 'antd';
+
 import "./board.css";
 import { SubCube } from "./sub_cube"
-import { DEFAULT_ARRAYS, TOTAL_SIZE } from "./config"
+import { DEFAULT_ARRAYS, TOTAL_SIZE, SMALL_CUBE_WIDTH, MID_CUBE_WIDTH } from "./config"
 
 interface BoardProps {
 }
 
 const DELAY_MS: number = 100 * 2
 const EMPTY_ARRAY: number[] = Array(81).fill(0)
-const generateRandomIndex = () => {
-  return Math.floor(Math.random() * TOTAL_SIZE);
+const generateRandomNumber = (size: number) => {
+  return Math.floor(Math.random() * size);
 }
 
 const Board: React.FC<BoardProps> = props => {
@@ -19,24 +21,38 @@ const Board: React.FC<BoardProps> = props => {
   const [xPos, setXPos] = useState<number>(-1);
   const [yPos, setYPos] = useState<number>(-1);
   const [editIndex, setEditIndex] = useState<number>(-1);
-  const [box0, setBox0] = useState<number>(generateRandomIndex());
-  const [box1, setBox1] = useState<number>(generateRandomIndex());
-  const [box2, setBox2] = useState<number>(generateRandomIndex());
+  const [box0, setBox0] = useState<number>(generateRandomNumber(TOTAL_SIZE));
+  const [box1, setBox1] = useState<number>(generateRandomNumber(TOTAL_SIZE));
+  const [box2, setBox2] = useState<number>(generateRandomNumber(TOTAL_SIZE));
   const [display0, setDisplay0] = useState<boolean>(true);
   const [display1, setDisplay1] = useState<boolean>(true);
   const [display2, setDisplay2] = useState<boolean>(true);
   const [editingCube, setEditingCube] = useState<boolean[][]>([[]]);
+  const [cubeWidth, setCubeWidth] = useState<number>(MID_CUBE_WIDTH);
+  const [width, setWidth] = React.useState(window.innerWidth); 
 
   useEffect(() => {
     if (!display0 && !display1 && !display2) {
-      setBox0(generateRandomIndex())
-      setBox1(generateRandomIndex())
-      setBox2(generateRandomIndex())
+      setBox0(generateRandomNumber(TOTAL_SIZE))
+      setBox1(generateRandomNumber(TOTAL_SIZE))
+      setBox2(generateRandomNumber(TOTAL_SIZE))
       setDisplay0(true);
       setDisplay1(true);
       setDisplay2(true);
     }
   }, [display0, display1, display2]);
+
+  useEffect(() => {
+    if (width <= 620) {
+      setCubeWidth(SMALL_CUBE_WIDTH)
+    } else {
+      setCubeWidth(MID_CUBE_WIDTH)
+    }
+  }, [width]);
+
+  useEffect(() => {  
+    window.addEventListener("resize", () => setWidth(window.innerWidth));  
+  }, []);  
 
   const btnColor = (val: number) => {
     if (val === -1) {
@@ -65,6 +81,15 @@ const Board: React.FC<BoardProps> = props => {
     return "btn"
   }
 
+  const onSetWidthLength = () => {
+    const width: number = ((cubeWidth+5) * 9);
+    return width + 'px';
+}
+
+const onSetCubeLength = () => {
+    return (cubeWidth+5) + 'px';
+}
+
   const onFinishEdit = () => {
     if (editIndex === 0) {
       setDisplay0(false);
@@ -77,7 +102,7 @@ const Board: React.FC<BoardProps> = props => {
     setEditing(false)
   }
 
-  const checkScore = (arrayList: number[]) => {
+  const checkScore = (arrayList: number[], cubeNum?: number) => {
     let tmpArray = [...arrayList];
     let flashArray = [...arrayList];
     let visitArray: boolean[] = Array(81).fill(false);
@@ -155,7 +180,9 @@ const Board: React.FC<BoardProps> = props => {
     }
     if (cnt > 0) {
       setArray(flashArray)
-      setTimeout(() => setScore(score + cnt * 9), DELAY_MS)
+      const add_score: number = cnt * (9 + generateRandomNumber(10))
+      // message.success(add_score+' points', 3)
+      setTimeout(() => setScore(score + add_score), DELAY_MS)
       setTimeout(() => setArray(tmpArray), DELAY_MS)
     }
   }
@@ -204,7 +231,7 @@ const Board: React.FC<BoardProps> = props => {
         setTimeout(() => checkScore(tmpArray), DELAY_MS)
         onFinishEdit();
       } else {
-        alert('fail')
+        alert('No space for it')
       }
     }
     else {
@@ -218,25 +245,25 @@ const Board: React.FC<BoardProps> = props => {
   }
 
   let boardView = (
-    array.map((val, idx) => { return (<button className={btnClassName(val)} style={{ backgroundColor: btnColor(val), borderRight: borderRight(idx), borderBottom: borderBottom(idx) }} onClick={() => onClickButton(idx)}></button>) })
+    array.map((val, idx) => { return (<button className={btnClassName(val)} style={{ backgroundColor: btnColor(val), borderRight: borderRight(idx), borderBottom: borderBottom(idx), width: onSetCubeLength(), height: onSetCubeLength() }} onClick={() => onClickButton(idx)}></button>) })
   )
 
-
   return (
-    <div className="board">
+    <Card className="board" style={{ width: onSetWidthLength() }}>
       <h1>Score: {score}</h1>
       <h2><button onClick={() => { setScore(0); setArray(EMPTY_ARRAY) }}>Reset</button><button onClick={() => {
         console.log('box0: ' + box0);
         console.log('box1: ' + box1)
         console.log('box2: ' + box2)
+        console.log(window.innerWidth)
       }}>log</button></h2>
       <div>{boardView}</div>
       <div style={{ display: 'flex' }}>
-        <SubCube inputArray={DEFAULT_ARRAYS[box0]} display={display0} editIndex={0} setEditIndex={setEditIndex} editing={editing} setEditing={setEditing} setXPos={setXPos} setYPos={setYPos} setEditingCube={setEditingCube} />
-        <SubCube inputArray={DEFAULT_ARRAYS[box1]} display={display1} editIndex={1} setEditIndex={setEditIndex} editing={editing} setEditing={setEditing} setXPos={setXPos} setYPos={setYPos} setEditingCube={setEditingCube} />
-        <SubCube inputArray={DEFAULT_ARRAYS[box2]} display={display2} editIndex={2} setEditIndex={setEditIndex} editing={editing} setEditing={setEditing} setXPos={setXPos} setYPos={setYPos} setEditingCube={setEditingCube} />
+        <SubCube inputArray={DEFAULT_ARRAYS[box0]} display={display0} editIndex={0} setEditIndex={setEditIndex} editing={editing} setEditing={setEditing} setXPos={setXPos} setYPos={setYPos} setEditingCube={setEditingCube} cubeWidth={cubeWidth}/>
+        <SubCube inputArray={DEFAULT_ARRAYS[box1]} display={display1} editIndex={1} setEditIndex={setEditIndex} editing={editing} setEditing={setEditing} setXPos={setXPos} setYPos={setYPos} setEditingCube={setEditingCube} cubeWidth={cubeWidth}/>
+        <SubCube inputArray={DEFAULT_ARRAYS[box2]} display={display2} editIndex={2} setEditIndex={setEditIndex} editing={editing} setEditing={setEditing} setXPos={setXPos} setYPos={setYPos} setEditingCube={setEditingCube} cubeWidth={cubeWidth}/>
       </div>
-    </div>
+    </Card>
   );
 }
 

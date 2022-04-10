@@ -39,3 +39,6 @@ interface ArrayType {
     [key: number]: boolean[][];
 }
 export const TOTAL_SIZE=34;
+
+export const SMALL_CUBE_WIDTH = 30;
+export const MID_CUBE_WIDTH = 45;

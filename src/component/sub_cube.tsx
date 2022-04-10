@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+
 import "./board.css";
 
 interface SubCubeProps {
@@ -11,12 +12,13 @@ interface SubCubeProps {
     setXPos: (e: number) => void
     setYPos: (e: number) => void
     setEditingCube: (e: boolean[][]) => void
+    cubeWidth: number
 }
 
-const CUBE_WIDTH = 45;
+// const CUBE_WIDTH = 45;
 
 const SubCube: React.FC<SubCubeProps> = props => {
-    const { inputArray, editing, display, editIndex, setEditIndex, setEditing, setXPos, setYPos, setEditingCube } = props;
+    const { inputArray, editing, display, editIndex, setEditIndex, setEditing, setXPos, setYPos, setEditingCube, cubeWidth } = props;
     const [chosen, setChosen] = useState<boolean>(false);
     const [selectedIdx, setSelectedIdx] = useState<number>(-1);
 
@@ -45,12 +47,12 @@ const SubCube: React.FC<SubCubeProps> = props => {
     }
 
     const onSetWidthLength = () => {
-        const width: number = (CUBE_WIDTH * inputArray[0].length);
+        const width: number = (cubeWidth * inputArray[0].length);
         return width + 'px';
     }
 
     const onSetCubeLength = () => {
-        return CUBE_WIDTH + 'px';
+        return cubeWidth + 'px';
     }
 
     const onClickButton = (idx: number) => {
