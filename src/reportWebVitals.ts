@@ -1,3 +1,4 @@
+/* eslint-disable semi */
 import { ReportHandler } from 'web-vitals';
 
 const reportWebVitals = (onPerfEntry?: ReportHandler) => {

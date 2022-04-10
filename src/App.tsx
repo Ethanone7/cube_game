@@ -1,11 +1,10 @@
+import React from 'react'
 import { Board } from './component/board'
 
-function App() {
+function App () {
   return (
-    <>
-      <Board></Board>
-    </>
-  );
+    <Board />
+  )
 }
 
-export default App;
+export default App
