@@ -1,10 +1,8 @@
-import React from 'react'
-import { Board } from './component/board'
+import React from 'react';
+import {Board} from './component/board';
 
-function App () {
-  return (
-    <Board />
-  )
+function App() {
+  return <Board />;
 }
 
-export default App
+export default App;
