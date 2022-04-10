@@ -255,7 +255,7 @@ const onSetCubeLength = () => {
         console.log('box0: ' + box0);
         console.log('box1: ' + box1)
         console.log('box2: ' + box2)
-        console.log(window.innerWidth)
+        alert(window.innerWidth)
       }}>log</button></h2>
       <div>{boardView}</div>
       <div style={{ display: 'flex' }}>
