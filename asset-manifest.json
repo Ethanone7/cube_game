@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/cube_game/static/css/main.c2fadcde.css",
+    "main.js": "/cube_game/static/js/main.058e4ecd.js",
+    "static/js/787.53c0df0f.chunk.js": "/cube_game/static/js/787.53c0df0f.chunk.js",
+    "index.html": "/cube_game/index.html",
+    "main.c2fadcde.css.map": "/cube_game/static/css/main.c2fadcde.css.map",
+    "main.058e4ecd.js.map": "/cube_game/static/js/main.058e4ecd.js.map",
+    "787.53c0df0f.chunk.js.map": "/cube_game/static/js/787.53c0df0f.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c2fadcde.css",
+    "static/js/main.058e4ecd.js"
+  ]
+}
