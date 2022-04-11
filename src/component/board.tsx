@@ -18,7 +18,6 @@ interface BoardProps {
 }
 
 const DELAY_MS: number = 100 * 2;
-const EMPTY_ARRAY: number[] = Array(81).fill(0);
 const EMPTY_2D_ARRAY: number[][] = new Array(9)
   .fill(0)
   .map(() => new Array(9).fill(0));
@@ -67,15 +66,6 @@ const Board: React.FC<BoardProps> = props => {
   useEffect(() => {
     window.addEventListener('resize', () => setWidth(window.innerWidth));
   }, []);
-
-  // const btnColor = (val: number) => {
-  //   if (val === -1) {
-  //     return 'green'
-  //   } else if (val === 1) { return 'aqua' } else if (val === 2) {
-  //     return 'aquamarine'
-  //   }
-  //   return 'gainsboro'
-  // }
 
   const btnColorV2 = (val: number) => {
     if (val === -1) {
@@ -232,8 +222,8 @@ const Board: React.FC<BoardProps> = props => {
       const colLen = editingCube[0].length;
       const rowOrigin = Math.floor(idx / 9);
       const colOrigin = idx % 9;
-      const rowStart = rowOrigin - yPos;
-      const colStart = colOrigin - xPos;
+      const rowStart = rowOrigin - xPos;
+      const colStart = colOrigin - yPos;
       for (let i = 0; i < rowLen; i++) {
         for (let j = 0; j < colLen; j++) {
           const x = rowStart + i;
@@ -261,8 +251,8 @@ const Board: React.FC<BoardProps> = props => {
       const colLen = editingCube[0].length;
       const rowOrigin = Math.floor(idx / 9);
       const colOrigin = idx % 9;
-      const rowStart = rowOrigin - yPos;
-      const colStart = colOrigin - xPos;
+      const rowStart = rowOrigin - xPos;
+      const colStart = colOrigin - yPos;
       for (let i = 0; i < rowLen; i++) {
         for (let j = 0; j < colLen; j++) {
           const x = rowStart + i;
@@ -329,7 +319,7 @@ const Board: React.FC<BoardProps> = props => {
             setTrueArray(EMPTY_2D_ARRAY);
             setDisplayArray(EMPTY_2D_ARRAY);
           }}
-          style={{display: 'none'}}
+          // style={{display: 'none'}}
         >
           Reset
         </button>
@@ -338,8 +328,8 @@ const Board: React.FC<BoardProps> = props => {
             console.log('box0: ' + box0);
             console.log('box1: ' + box1);
             console.log('box2: ' + box2);
-            console.log(displayArray);
-            console.log(trueArray);
+            console.log(xPos);
+            console.log(yPos);
           }}
           style={{display: 'none'}}
         >
@@ -367,6 +357,7 @@ const Board: React.FC<BoardProps> = props => {
           setYPos={setYPos}
           setEditingCube={setEditingCube}
           cubeWidth={cubeWidth}
+          trueMatrix={trueArray}
         />
         <SubCube
           inputArray={DEFAULT_ARRAYS[box1]}
@@ -379,6 +370,7 @@ const Board: React.FC<BoardProps> = props => {
           setYPos={setYPos}
           setEditingCube={setEditingCube}
           cubeWidth={cubeWidth}
+          trueMatrix={trueArray}
         />
         <SubCube
           inputArray={DEFAULT_ARRAYS[box2]}
@@ -391,6 +383,7 @@ const Board: React.FC<BoardProps> = props => {
           setYPos={setYPos}
           setEditingCube={setEditingCube}
           cubeWidth={cubeWidth}
+          trueMatrix={trueArray}
         />
       </div>
     </Card>

@@ -13,6 +13,7 @@ interface SubCubeProps {
   setYPos: (e: number) => void;
   setEditingCube: (e: boolean[][]) => void;
   cubeWidth: number;
+  trueMatrix: number[][];
 }
 
 const SubCube: React.FC<SubCubeProps> = props => {
@@ -27,8 +28,10 @@ const SubCube: React.FC<SubCubeProps> = props => {
     setYPos,
     setEditingCube,
     cubeWidth,
+    trueMatrix,
   } = props;
   const [chosen, setChosen] = useState<boolean>(false);
+  const [hold, setHold] = useState<boolean>(true);
   const [selectedIdx, setSelectedIdx] = useState<number>(-1);
 
   useEffect(() => {
@@ -37,12 +40,62 @@ const SubCube: React.FC<SubCubeProps> = props => {
     }
   }, [display]);
 
+  useEffect(() => {
+    if (display) {
+      onCheckHold();
+    }
+  }, [trueMatrix, inputArray]);
+
+  const onCheckHold = () => {
+    let flag = false;
+    for (let i = 0; i < trueMatrix.length; i++) {
+      for (let j = 0; j < trueMatrix[0].length; j++) {
+        let skipFlag = false;
+        for (let x = 0; x < inputArray.length; x++) {
+          for (let y = 0; y < inputArray[0].length; y++) {
+            const row = i + x;
+            const col = j + y;
+            if (
+              row < 0 ||
+              row >= trueMatrix.length ||
+              col < 0 ||
+              col >= trueMatrix[0].length
+            ) {
+              skipFlag = true;
+              break;
+            }
+            if (inputArray[x][y] && trueMatrix[i + x][j + y] > 0) {
+              skipFlag = true;
+              break;
+            }
+          }
+          if (skipFlag) {
+            break;
+          }
+        }
+        if (!skipFlag) {
+          flag = true;
+        }
+        if (flag) {
+          break;
+        }
+      }
+      if (flag) {
+        break;
+      }
+    }
+    setHold(flag);
+  };
+
   const btnColor = (val: boolean, idx: number) => {
     if (!val || !display) {
       return 'transparent';
     }
     if (chosen) {
       return idx === selectedIdx ? 'lime' : 'green';
+    }
+    if (!hold) {
+      return 'grey';
     }
     return 'aqua';
   };
@@ -64,7 +117,7 @@ const SubCube: React.FC<SubCubeProps> = props => {
   };
 
   const onClickButton = (idx: number) => {
-    if (chosen && editing && display) {
+    if (chosen && editing && display && hold) {
       setSelectedIdx(-1);
       setChosen(false);
       setXPos(-1);
@@ -72,11 +125,11 @@ const SubCube: React.FC<SubCubeProps> = props => {
       setEditing(false);
       setEditingCube([[]]);
       setEditIndex(-1);
-    } else if (!chosen && !editing && display) {
+    } else if (!chosen && !editing && display && hold) {
       setSelectedIdx(idx);
       setChosen(true);
-      const x = idx % inputArray[0].length;
-      const y = Math.floor(idx / inputArray[0].length);
+      const x = Math.floor(idx / inputArray[0].length);
+      const y = idx % inputArray[0].length;
       setXPos(x);
       setYPos(y);
       setEditing(true);
@@ -120,6 +173,7 @@ const SubCube: React.FC<SubCubeProps> = props => {
         >
           log2
         </button>
+        <button onClick={() => console.log(inputArray)}>log3</button>
       </div>
     </div>
   );
